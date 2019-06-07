@@ -1,5 +1,5 @@
 import React from "react";
-
+//  Binance, Bithumb, Coinbase Pro, Kraken, Bitstamp, Poloniex, bitFlyer, Bitfinex
 const SelectBox = ({ onChangeCoin }) => {
   return (
     <div className="select-box">

@@ -2,8 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import Header from "./components/header.jsx";
+import List from "./components/list.jsx";
 import SelectBox from "./components/selectBox.jsx";
 import Compare from "./components/compare.jsx";
+import Coins from "./components/coins.jsx"
 
 class App extends React.Component {
   constructor(props) {
@@ -43,10 +45,16 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <Header />
-        <SelectBox onChangeCoin={this.onChangeCoin}/>
-        <Compare bithumb={this.state.bithumb} coin={this.state.coin}/>
+      <div className="container">
+        <div className="container-left">
+          <Header/>
+          <List />
+          {/* <Compare bithumb={this.state.bithumb} coin={this.state.coin}/> */}
+        </div>
+        <div className="container-right">
+          {/* <Coins /> */}
+          {/* <SelectBox onChangeCoin={this.onChangeCoin}/> */}
+        </div>
       </div>
     );
   }
