@@ -10,21 +10,9 @@ app.use(express.static(path.join(__dirname, "/../client/dist")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/bithumb/:id", function(req, res) {
-  //https://apidocs.bithumb.com/docs/ticker
+app.get("/price/:exchange/:currency", function(req, res) {
   return axios
-    .get(`https://api.bithumb.com/public/ticker/${req.params.id}`)
-    .then(data => {
-      res.send(data.data.data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
-app.get("/price/:exchange", function(req, res) {
-  return axios
-  .get(`https://api.nomics.com/v1/exchange-markets/prices?key=${API_KEY}&currency=BTC&exchange=${req.params.exchange}`)
+  .get(`https://api.nomics.com/v1/exchange-markets/prices?key=${API_KEY}&currency=${req.params.currency}&exchange=${req.params.exchange}`)
   .then(data => {
     res.send(data.data);
   })
@@ -36,6 +24,3 @@ app.get("/price/:exchange", function(req, res) {
 app.listen(3000, function() {
   console.log("listening on port 3000!");
 });
-
-
-// https://p.nomics.com/cryptocurrency-bitcoin-api
