@@ -15,7 +15,7 @@ const Market = ({
   return (
     <div className="market">
       <div className="market-total">
-        Total Market Cap
+        total market cap
         <div className="market-total-value">
           <CountUp
             start={0}
@@ -29,19 +29,19 @@ const Market = ({
       <table className="market-table">
         <thead>
           <tr>
-            <th className="col1">Rank</th>
-            <th className="col2">Name</th>
+            <th className="col1">rank</th>
+            <th className="col2">name</th>
             <th className="col3 headerClick" onClick={onClickMarketCap}>
-              Market Cap
+              market cap
             </th>
             <th className="col4 headerClick" onClick={onClickPrice}>
-              Price
+              price
             </th>
             <th className="col5 headerClick" onClick={onClickSupply}>
-              Circulating Supply
+              circulating supply
             </th>
             <th className="col6 headerClick" onClick={onClickChange}>
-              Change(24h)%
+              change(24h)%
             </th>
           </tr>
         </thead>
@@ -57,7 +57,7 @@ const Market = ({
                     height="18"
                     align="middle"
                   />{" "}
-                  <span className="col2-name">{coin.name}</span>
+                  <span className="col2-name">{coin.name.toLowerCase()}</span>
                 </td>
                 <td className="col3">
                   $
@@ -72,7 +72,7 @@ const Market = ({
                   {numberWithCommas(
                     Math.round(Number(coin.circulating_supply))
                   )}{" "}
-                  {coin.symbol}
+                  {coin.symbol.toLowerCase()}
                 </td>
                 <td className="col6">
                   <span

@@ -6,8 +6,12 @@ import Market from "./components/market.jsx";
 import Portfolio from "./components/portfolio.jsx";
 import Footer from "./components/footer.jsx";
 import Popup from "./components/popup.jsx";
+import Currency from "./components/currency.jsx"
 import Modal from "react-animated-modal";
 import roundTo from "round-to";
+import Rodal from "rodal";
+import "./../../node_modules/rodal/lib/rodal.css";
+import { style } from "./helper.js"
 
 class App extends React.Component {
   constructor(props) {
@@ -24,7 +28,8 @@ class App extends React.Component {
       marketOrPortfolio: false,
       coinOnModal: null,
       purchasePrice: 0,
-      amount: 0
+      amount: 0,
+      showCurrency: false
     };
 
     this.onClickPrice = this.onClickPrice.bind(this);
@@ -37,11 +42,12 @@ class App extends React.Component {
     this.onChangeAmount = this.onChangeAmount.bind(this);
     this.onSubmitAddPortfolio = this.onSubmitAddPortfolio.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
+    this.showCurrency = this.showCurrency.bind(this);
   }
 
   componentDidMount() {
-    // this.getTotalMarketCap();
-    // this.getMarketCap();
+    this.getTotalMarketCap();
+    this.getMarketCap();
   }
 
   getTotalMarketCap() {
@@ -153,8 +159,8 @@ class App extends React.Component {
   onSubmitAddPortfolio(e) {
     e.preventDefault();
     for (let i = 0; i < this.state.portfolio.length; i++) {
-      if(this.state.portfolio[i].name === this.state.coinOnModal.name) {
-        console.log("Coin already exists in portfolio")
+      if (this.state.portfolio[i].name === this.state.coinOnModal.name) {
+        console.log("Coin already exists in portfolio");
         return;
       }
     }
@@ -192,12 +198,17 @@ class App extends React.Component {
     });
   }
 
+  showCurrency() {
+    this.setState({ showCurrency: !this.state.showCurrency });
+  }
+
   render() {
     return (
       <div>
         <Header
           marketOrPortfolio={this.state.marketOrPortfolio}
           onClickMarketOrPortfolio={this.onClickMarketOrPortfolio}
+          showCurrency={this.showCurrency}
         />
         <Modal
           visible={this.state.showModal}
@@ -211,6 +222,17 @@ class App extends React.Component {
             onSubmitAddPortfolio={this.onSubmitAddPortfolio}
           />
         </Modal>
+        <Rodal
+          visible={this.state.showCurrency}
+          onClose={this.showCurrency}
+          customStyles={style}
+          animation="slideRight"
+          width={250}
+          duration={500}
+          showCloseButton={false}
+        >
+          <Currency />
+        </Rodal>
         {!this.state.marketOrPortfolio ? (
           <Market
             onClickPrice={this.onClickPrice}

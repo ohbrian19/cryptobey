@@ -37,6 +37,17 @@ app.get("/total", function(req, res) {
     });
 });
 
+app.get("/currency/:base", function(req, res) {
+  return axios
+    .get(`https://api.ratesapi.io/api/latest?base=${req.params.base.toUpperCase()}`)
+    .then(data => {
+      res.send(data.data.rates)
+    })
+    .catch(err => {
+      console.log(err);
+    })
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, function() {
   console.log(`listening on port ${PORT}!`);

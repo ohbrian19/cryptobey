@@ -32,14 +32,91 @@ const data = coins =>
         ((coin.currentPrice * Number(coin.amount)) / sumCV(coins)) * 100,
         2
       ),
-      label: coin.name
+      label: coin.name.toLowerCase()
     };
   });
+
+const currencyList = [
+  "gbp",
+  "hkd",
+  "idr",
+  "ils",
+  "dkk",
+  "inr",
+  "chf",
+  "mxn",
+  "czk",
+  "sgd",
+  "thb",
+  "hrk",
+  "eur",
+  "myr",
+  "nok",
+  "cny",
+  "bgn",
+  "php",
+  "pln",
+  "zar",
+  "cad",
+  "isk",
+  "brl",
+  "ron",
+  "nzd",
+  "try",
+  "jpy",
+  "rub",
+  "krw",
+  "usd",
+  "aud",
+  "huf",
+  "sek"
+];
+
+const theme = {
+  select: {
+    container: {
+      extend: () => {
+        return {
+          "height": "400px",
+          "width": "250px"
+        };
+      }
+    }
+  },
+  box: {
+    extend: () => {
+      return {
+        "z-index": "1000 !important",
+        "font-family": "'Major Mono Display', monospace;"
+      };
+    }
+  },
+  global: {
+    focus: {
+      border: {
+        color: "none"
+      }
+    },
+    colors: {
+      brand: "black"
+    }
+  }
+};
+
+const style = {
+  marginRight: "80px",
+  marginTop: "90px",
+  borderRadius: "40px",
+  background: "lightgrey"
+};
 
 module.exports = {
   numberWithCommas,
   data,
   explodePie,
   sumCV,
-  sumPV
+  sumPV,
+  currencyList,
+  theme,
+  style
 };

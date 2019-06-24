@@ -16,8 +16,9 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
     theme: "dark1",
     animationEnabled: true,
     title: {
-      text: "Portfolio",
-      fontSize: 30
+      text: "portfolio",
+      fontSize: 25,
+      fontFamily: "'Major Mono Display', monospace"
     },
     backgroundColor: "black",
     data: [
@@ -28,7 +29,8 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
         indexLabel: "{label}",
         yValueFormatString: '###0.0"%"',
         click: explodePie,
-        dataPoints: data(portfolio)
+        dataPoints: data(portfolio),
+        indexLabelFontFamily: "'Major Mono Display', monospace",
       }
     ]
   };
@@ -39,13 +41,13 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
         {portfolio.length > 0 ? (
           <CanvasJSChart options={options} />
         ) : (
-          <span className="portfolio-none">Please Add Coins To Portfolio</span>
+          <span className="portfolio-none">please add coins to portfolio</span>
         )}
       </div>
       {portfolio.length > 0 ? (
         <div className="portfolio-summary">
           <div>
-            Current Value:{" "}
+            current value:{" "}
             <CountUp
               start={0}
               end={roundTo(sumCV(portfolio), 2)}
@@ -55,7 +57,7 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
             />
           </div>
           <div>
-            Purchase Value:{" "}
+            purchase value:{" "}
             <CountUp
               start={0}
               end={roundTo(sumPV(portfolio), 2)}
@@ -65,7 +67,7 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
             />
           </div>
           <div>
-            Gains / Losses:{" "}
+            gains / losses:{" "}
             <span
               style={
                 roundTo(sumCV(portfolio) - sumPV(portfolio), 2) > 0
@@ -90,15 +92,15 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
         <thead>
           <tr>
             <th className="portfolio-col1" />
-            <th className="portfolio-col2">Symbol</th>
-            <th className="portfolio-col3">Name</th>
-            <th className="portfolio-col4">Amount</th>
+            <th className="portfolio-col2">symbol</th>
+            <th className="portfolio-col3">name</th>
+            <th className="portfolio-col4">amount</th>
             {/* <th className="portfolio-col5">Current Price</th>
             <th className="portfolio-col6">Purchase Price</th> */}
-            <th className="portfolio-col7">Current Value</th>
-            <th className="portfolio-col8">Purchase Value</th>
-            <th className="portfolio-col9">Gains / Losses</th>
-            <th className="portfolio-col10">Remove</th>
+            <th className="portfolio-col7">current value</th>
+            <th className="portfolio-col8">purchase value</th>
+            <th className="portfolio-col9">gains / losses</th>
+            <th className="portfolio-col10">remove</th>
           </tr>
         </thead>
         <tbody>
@@ -114,9 +116,9 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
                     height="18"
                   />
                 </td>
-                <td className="portfolio-col3">{coin.name}</td>
+                <td className="portfolio-col3">{coin.name.toLowerCase()}</td>
                 <td className="portfolio-col4">
-                  {numberWithCommas(coin.amount)} {coin.symbol}
+                  {numberWithCommas(coin.amount)} {coin.symbol.toLowerCase()}
                 </td>
                 {/* <td className="portfolio-col5">$ {coin.currentPrice}</td>
                 <td className="portfolio-col6">$ {coin.purchasePrice}</td> */}
