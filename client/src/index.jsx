@@ -1,184 +1,234 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
-// import List from "./components/list.jsx";
-// import SelectBox from "./components/selectBox.jsx";
-// import Compare from "./components/compare.jsx";
-// import Coins from "./components/coins.jsx"
-import Table from "./components/table.jsx";
+import Header from "./components/header.jsx";
+import Market from "./components/market.jsx";
+import Portfolio from "./components/portfolio.jsx";
+import Footer from "./components/footer.jsx";
+import Popup from "./components/popup.jsx";
+import Modal from "react-animated-modal";
+import roundTo from "round-to";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      coinToggle: false,
-      exchange: null,
-      currency: null,
-      exchangeCoins: [],
-      baseExchange: [],
-      targetExchange: [],
-      targetExchangeName: null,
-      portfolio: []
+      market: [],
+      total: null,
+      portfolio: [],
+      sortPrice: false,
+      sortMarketCap: false,
+      sortChange: false,
+      sortSupply: false,
+      showModal: false,
+      marketOrPortfolio: false,
+      coinOnModal: null,
+      purchasePrice: 0,
+      amount: 0
     };
 
-    this.onClickPortfolio = this.onClickPortfolio.bind(this);
-    this.onChangeExchange = this.onChangeExchange.bind(this);
-    this.onChangeCurrency = this.onChangeCurrency.bind(this);
-    this.onChangeTargetExchange = this.onChangeTargetExchange.bind(this);
-    this.onClickCoin = this.onClickCoin.bind(this);
+    this.onClickPrice = this.onClickPrice.bind(this);
+    this.onClickMarketCap = this.onClickMarketCap.bind(this);
+    this.onClickChange = this.onClickChange.bind(this);
+    this.onClickSupply = this.onClickSupply.bind(this);
+    this.onClickCoinToAdd = this.onClickCoinToAdd.bind(this);
+    this.onClickMarketOrPortfolio = this.onClickMarketOrPortfolio.bind(this);
+    this.onChangePurchasePrice = this.onChangePurchasePrice.bind(this);
+    this.onChangeAmount = this.onChangeAmount.bind(this);
+    this.onSubmitAddPortfolio = this.onSubmitAddPortfolio.bind(this);
+    this.onClickRemove = this.onClickRemove.bind(this);
   }
 
-  componentDidMount() {}
-
-  onClickPortfolio() {
-    this.setState({
-      coinToggle: !this.state.coinToggle
-    });
+  componentDidMount() {
+    // this.getTotalMarketCap();
+    // this.getMarketCap();
   }
 
-  onChangeExchange() {
-    let value = document.getElementById("exchange").value;
-    this.setState(
-      {
-        exchange: value
-      },
-      () => {
-        if (this.state.exchange && this.state.currency) {
-          this.getListCoins();
-        }
-      }
-    );
-  }
-
-  onChangeCurrency() {
-    let value = document.getElementById("currency").value;
-    this.setState(
-      {
-        currency: value
-      },
-      () => {
-        if (this.state.exchange && this.state.currency) {
-          this.getListCoins();
-        }
-      }
-    );
-  }
-
-  onChangeTargetExchange() {
-    let value = document.getElementById("targetExchange").value;
-    return axios.get(`/price/${value}/${this.state.currency}`).then(data => {
+  getTotalMarketCap() {
+    return axios.get("/total").then(data => {
       this.setState({
-        targetExchangeName: value,
-        targetExchange: data.data
+        total: Math.round(data.data.quote.USD.total_market_cap)
       });
     });
   }
 
-  onClickCoin(e) {
-    let coin = {
-      exchange: e.exchange, // binance
-      base: e.base, // ADA
-      quote: e.quote, // BTC
-      price: e.price_quote // Price
-    }
-    // If I refresh, portfolio goes to initial state, so maybe later store in database
-    // if there is same exchange, base, quote alert "already added"
-    this.setState({
-      portfolio: [...this.state.portfolio, coin]
-    }, () => {
-      alert("Added to Portfolio");
-    })
+  getMarketCap() {
+    return axios.get("/market").then(data => {
+      this.setState({
+        market: data.data
+      });
+    });
   }
 
-  getListCoins() {  
-    return axios
-      .get(`/price/${this.state.exchange}/${this.state.currency}`)
-      .then(data => {
-        this.setState({
-          exchangeCoins: data.data,
-          baseExchange: data.data
-        });
+  onClickPrice() {
+    this.setState({
+      market: !this.state.sortPrice
+        ? this.state.market.sort(
+            (a, b) => a.quote.USD.price - b.quote.USD.price
+          )
+        : this.state.market.sort(
+            (a, b) => b.quote.USD.price - a.quote.USD.price
+          ),
+      sortPrice: !this.state.sortPrice
+    });
+  }
+
+  onClickMarketCap() {
+    this.setState({
+      market: !this.state.sortMarketCap
+        ? this.state.market.sort(
+            (a, b) => a.quote.USD.market_cap - b.quote.USD.market_cap
+          )
+        : this.state.market.sort(
+            (a, b) => b.quote.USD.market_cap - a.quote.USD.market_cap
+          ),
+      sortMarketCap: !this.state.sortMarketCap
+    });
+  }
+
+  onClickChange() {
+    this.setState({
+      market: !this.state.sortChange
+        ? this.state.market.sort(
+            (a, b) =>
+              a.quote.USD.percent_change_24h - b.quote.USD.percent_change_24h
+          )
+        : this.state.market.sort(
+            (a, b) =>
+              b.quote.USD.percent_change_24h - a.quote.USD.percent_change_24h
+          ),
+      sortChange: !this.state.sortChange
+    });
+  }
+
+  onClickSupply() {
+    this.setState({
+      market: !this.state.sortSupply
+        ? this.state.market.sort(
+            (a, b) => a.circulating_supply - b.circulating_supply
+          )
+        : this.state.market.sort(
+            (a, b) => b.circulating_supply - a.circulating_supply
+          ),
+      sortSupply: !this.state.sortSupply
+    });
+  }
+
+  onClickCoinToAdd(coin) {
+    this.setState({
+      showModal: !this.state.showModal,
+      coinOnModal: !this.state.showModal
+        ? {
+            name: coin.name,
+            symbol: coin.symbol,
+            price:
+              coin.quote.USD.price > 1
+                ? roundTo(coin.quote.USD.price, 2)
+                : roundTo(coin.quote.USD.price, 6)
+          }
+        : null,
+      amount: 0,
+      purchasePrice: 0
+    });
+  }
+
+  onClickMarketOrPortfolio() {
+    this.setState({
+      marketOrPortfolio: !this.state.marketOrPortfolio
+    });
+  }
+
+  onChangePurchasePrice(e) {
+    this.setState({
+      purchasePrice: e.target.value
+    });
+  }
+
+  onChangeAmount(e) {
+    this.setState({
+      amount: e.target.value
+    });
+  }
+
+  onSubmitAddPortfolio(e) {
+    e.preventDefault();
+    for (let i = 0; i < this.state.portfolio.length; i++) {
+      if(this.state.portfolio[i].name === this.state.coinOnModal.name) {
+        console.log("Coin already exists in portfolio")
+        return;
+      }
+    }
+    if (this.state.purchasePrice > 0 && this.state.amount > 0) {
+      console.log("Successfully Added!");
+      let coin = {
+        name: this.state.coinOnModal.name,
+        symbol: this.state.coinOnModal.symbol,
+        currentPrice: this.state.coinOnModal.price,
+        purchasePrice: this.state.purchasePrice,
+        amount: this.state.amount
+      };
+      this.setState({
+        portfolio: [...this.state.portfolio, coin],
+        showModal: false,
+        purchasePrice: 0,
+        amount: 0
       });
+    } else {
+      console.log("Please type in both purchase price and amount of the coin");
+      document.getElementById("modal-input-price").reset();
+      document.getElementById("modal-input-amount").reset();
+      this.setState({
+        purchasePrice: 0,
+        amount: 0
+      });
+    }
+  }
+
+  onClickRemove(i) {
+    const portfolioAdjusted = this.state.portfolio;
+    portfolioAdjusted.splice(i, 1);
+    this.setState({
+      portfolio: portfolioAdjusted
+    });
   }
 
   render() {
     return (
-      <div className="container">
-        <div className="container-left">
-          <div className="container-left-header">cryptObey</div>
-          <div className="coin-portfolio">
-            <div onClick={this.onClickPortfolio}>Compare Exchange</div>
-            {this.state.coinToggle ? (
-              <div>
-                <select id="exchange" onChange={this.onChangeExchange}>
-                  <option value="null">Choose Exchange</option>
-                  <option value="binance">Binance</option>
-                  <option value="bitfinex">Bitfinex</option>
-                  <option value="bitflyer">bitFlyer</option>
-                  <option value="bithumb">Bithumb</option>
-                  {/* <option value="bitmax">BitMax</option>   diff from bitmex */}
-                  <option value="bitstamp">Bitstamp</option>
-                  <option value="bittrex">Bittrex</option>
-                  <option value="kraken">Kraken</option>
-                  <option value="poloniex">Poloniex</option>
-                  <option value="upbit">Upbit</option>
-                </select>
-                <select id="currency" onChange={this.onChangeCurrency}>
-                  <option value="null">Choose Currency</option>
-                  <option value="BTC">BTC</option>
-                  <option value="USD">USD</option>
-                  <option value="USDT">USDT</option>
-                  <option value="KRW">KRW</option>
-                </select>
-                <select
-                  id="targetExchange"
-                  onChange={this.onChangeTargetExchange}
-                >
-                  <option value="null">Choose Exchange</option>
-                  <option value="binance">Binance</option>
-                  <option value="bitfinex">Bitfinex</option>
-                  <option value="bitflyer">bitFlyer</option>
-                  <option value="bithumb">Bithumb</option>
-                  {/* <option value="bitmax">BitMax</option>   diff from bitmex */}
-                  <option value="bitstamp">Bitstamp</option>
-                  <option value="bittrex">Bittrex</option>
-                  <option value="kraken">Kraken</option>
-                  <option value="poloniex">Poloniex</option>
-                  <option value="upbit">Upbit</option>
-                </select>
-                {this.state.exchangeCoins.length > 0 ? (
-                  <div className="coin-portfolio-coins">
-                    {this.state.exchangeCoins.map((coin, i) => {
-                      if (coin.quote === this.state.currency) {
-                        return (
-                          <span className="coin-portfolio-coin" key={i}>
-                            <img
-                              src={`/img/${coin.base}.png`}
-                              width="20"
-                              height="20"
-                            />
-                            {coin.base}{" "}
-                          </span>
-                        );
-                      }
-                    })}
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
-            <div>Market Cap</div>
-            <div>Portfolio</div>
-          </div>
-        </div>
-        <div className="container-right">
-          <Table
-            coins={this.state.baseExchange}
-            currency={this.state.currency}
-            targetExchange={this.state.targetExchange}
-            targetExchangeName={this.state.targetExchangeName}
-            onClickCoin={this.onClickCoin}
+      <div>
+        <Header
+          marketOrPortfolio={this.state.marketOrPortfolio}
+          onClickMarketOrPortfolio={this.onClickMarketOrPortfolio}
+        />
+        <Modal
+          visible={this.state.showModal}
+          closemodal={this.onClickCoinToAdd}
+          type="bounceIn"
+        >
+          <Popup
+            coin={this.state.coinOnModal}
+            onChangePurchasePrice={this.onChangePurchasePrice}
+            onChangeAmount={this.onChangeAmount}
+            onSubmitAddPortfolio={this.onSubmitAddPortfolio}
           />
-        </div>
+        </Modal>
+        {!this.state.marketOrPortfolio ? (
+          <Market
+            onClickPrice={this.onClickPrice}
+            onClickMarketCap={this.onClickMarketCap}
+            onClickChange={this.onClickChange}
+            onClickSupply={this.onClickSupply}
+            onClickCoinToAdd={this.onClickCoinToAdd}
+            market={this.state.market}
+            total={this.state.total}
+          />
+        ) : (
+          <Portfolio
+            portfolio={this.state.portfolio}
+            onClickRemove={this.onClickRemove}
+          />
+        )}
+
+        <Footer />
       </div>
     );
   }
