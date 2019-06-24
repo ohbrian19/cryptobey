@@ -94,7 +94,7 @@ class Currency extends React.Component {
               options={this.state.options}
               plain={true}
               icon={false}
-              dropProps={{color: "black"}}
+              dropProps={{ color: "black" }}
               onSearch={searchText => {
                 const regexp = new RegExp(searchText, "i");
                 this.setState({

@@ -6,12 +6,12 @@ import Market from "./components/market.jsx";
 import Portfolio from "./components/portfolio.jsx";
 import Footer from "./components/footer.jsx";
 import Popup from "./components/popup.jsx";
-import Currency from "./components/currency.jsx"
+import Currency from "./components/currency.jsx";
 import Modal from "react-animated-modal";
 import roundTo from "round-to";
 import Rodal from "rodal";
 import "./../../node_modules/rodal/lib/rodal.css";
-import { style } from "./helper.js"
+import { style } from "./helper.js";
 
 class App extends React.Component {
   constructor(props) {

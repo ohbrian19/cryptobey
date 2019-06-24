@@ -30,7 +30,7 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
         yValueFormatString: '###0.0"%"',
         click: explodePie,
         dataPoints: data(portfolio),
-        indexLabelFontFamily: "'Major Mono Display', monospace",
+        indexLabelFontFamily: "'Major Mono Display', monospace"
       }
     ]
   };

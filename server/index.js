@@ -13,7 +13,7 @@ app.get("/market", function(req, res) {
   return axios
     .get(
       `https://pro-\api.coinmarketcap.com/v1/cryptocurrency/listings/latest`,
-      { headers: { "X-CMC_PRO_API_KEY": COINMARKETCAP_API } }
+      { headers: { "X-CMC_PRO_API_KEY": COINMARKETCAP_API || process.env.API } }
     )
     .then(data => {
       res.send(data.data.data);
@@ -25,10 +25,9 @@ app.get("/market", function(req, res) {
 
 app.get("/total", function(req, res) {
   return axios
-    .get(
-      `https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest`,
-      { headers: { "X-CMC_PRO_API_KEY": COINMARKETCAP_API } }
-    )
+    .get(`https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest`, {
+      headers: { "X-CMC_PRO_API_KEY": COINMARKETCAP_API }
+    })
     .then(data => {
       res.send(data.data.data);
     })
@@ -39,14 +38,16 @@ app.get("/total", function(req, res) {
 
 app.get("/currency/:base", function(req, res) {
   return axios
-    .get(`https://api.ratesapi.io/api/latest?base=${req.params.base.toUpperCase()}`)
+    .get(
+      `https://api.ratesapi.io/api/latest?base=${req.params.base.toUpperCase()}`
+    )
     .then(data => {
-      res.send(data.data.rates)
+      res.send(data.data.rates);
     })
     .catch(err => {
       console.log(err);
-    })
-})
+    });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, function() {
