@@ -46,8 +46,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getTotalMarketCap();
-    this.getMarketCap();
+    // this.getTotalMarketCap();
+    // this.getMarketCap();
   }
 
   getTotalMarketCap() {

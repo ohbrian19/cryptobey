@@ -84,6 +84,13 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
                 separator=","
                 prefix="$"
               />
+              {"  "}
+              {roundTo(
+                ((sumCV(portfolio) - sumPV(portfolio)) / sumPV(portfolio)) *
+                  100,
+                2
+              )}
+              %
             </span>
           </div>
         </div>
