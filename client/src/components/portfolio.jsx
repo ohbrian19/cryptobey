@@ -127,7 +127,9 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
                 <td className="portfolio-col4">
                   {numberWithCommas(coin.amount)} {coin.symbol.toLowerCase()}
                 </td>
-                <td className="portfolio-col5">$ {roundTo(coin.currentPrice, 2)}</td>
+                <td className="portfolio-col5">
+                  $ {roundTo(coin.currentPrice, 2)}
+                </td>
                 <td className="portfolio-col6">$ {coin.purchasePrice}</td>
                 <td className="portfolio-col7">
                   $ {numberWithCommas(roundTo(cv, 2))}

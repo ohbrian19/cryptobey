@@ -65,21 +65,19 @@ class App extends React.Component {
   }
 
   getMarketCap() {
-    return axios
-      .get("/market")
-      .then(data => {
-        this.setState(
-          {
-            market: data.data
-          },
-          () => {
-            for (let i = 0; i < this.state.market.length; i++) {
-              axios.post("/update", this.state.market[i]);
-            }
-            this.getPortfolio()
+    return axios.get("/market").then(data => {
+      this.setState(
+        {
+          market: data.data
+        },
+        () => {
+          for (let i = 0; i < this.state.market.length; i++) {
+            axios.post("/update", this.state.market[i]);
           }
-        );
-      })
+          this.getPortfolio();
+        }
+      );
+    });
   }
 
   onClickPrice() {

@@ -77,8 +77,8 @@ const theme = {
     container: {
       extend: () => {
         return {
-          "height": "400px",
-          "width": "250px"
+          height: "400px",
+          width: "250px"
         };
       }
     }
