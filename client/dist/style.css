@@ -14,10 +14,6 @@
   padding-left: 10px;
 }
 
-.header-logo {
-  cursor: pointer;
-}
-
 .header-portfolio {
   float: right;
   cursor: pointer;
@@ -229,4 +225,8 @@ input {
 /**********************************************************************************************************************/
 .footer {
   padding: 50px;
+}
+
+.up {
+  padding-right: 10px;
 }

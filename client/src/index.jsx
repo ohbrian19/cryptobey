@@ -47,7 +47,7 @@ class App extends React.Component {
 
   componentDidMount() {
     // this.getTotalMarketCap();
-    // this.getMarketCap();
+    this.getMarketCap();
   }
 
   getTotalMarketCap() {
@@ -209,6 +209,7 @@ class App extends React.Component {
           marketOrPortfolio={this.state.marketOrPortfolio}
           onClickMarketOrPortfolio={this.onClickMarketOrPortfolio}
           showCurrency={this.showCurrency}
+          loginLogout={this.loginLogout}
         />
         <Modal
           visible={this.state.showModal}
