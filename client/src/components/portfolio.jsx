@@ -102,8 +102,8 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
             <th className="portfolio-col2">symbol</th>
             <th className="portfolio-col3">name</th>
             <th className="portfolio-col4">amount</th>
-            {/* <th className="portfolio-col5">Current Price</th>
-            <th className="portfolio-col6">Purchase Price</th> */}
+            <th className="portfolio-col5">current price</th>
+            <th className="portfolio-col6">purchase price</th>
             <th className="portfolio-col7">current value</th>
             <th className="portfolio-col8">purchase value</th>
             <th className="portfolio-col9">gains / losses</th>
@@ -127,8 +127,8 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
                 <td className="portfolio-col4">
                   {numberWithCommas(coin.amount)} {coin.symbol.toLowerCase()}
                 </td>
-                {/* <td className="portfolio-col5">$ {coin.currentPrice}</td>
-                <td className="portfolio-col6">$ {coin.purchasePrice}</td> */}
+                <td className="portfolio-col5">$ {roundTo(coin.currentPrice, 2)}</td>
+                <td className="portfolio-col6">$ {coin.purchasePrice}</td>
                 <td className="portfolio-col7">
                   $ {numberWithCommas(roundTo(cv, 2))}
                 </td>
@@ -148,7 +148,7 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
                   {roundTo(((cv - pv) / pv) * 100, 2)} %
                 </td>
                 <td className="portfolio-col10">
-                  <button onClick={() => onClickRemove(i)}>remove</button>
+                  <button onClick={() => onClickRemove(coin)}>remove</button>
                 </td>
               </tr>
             );

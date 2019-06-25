@@ -46,8 +46,14 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getTotalMarketCap();
+    // this.getTotalMarketCap();
     this.getMarketCap();
+  }
+
+  updateCurrentPrice() {
+    for (let i = 0; i < this.state.portfolio.length; i++) {
+      console.log(this.state.portfolio[i].currentPrice);
+    }
   }
 
   getTotalMarketCap() {
@@ -59,11 +65,21 @@ class App extends React.Component {
   }
 
   getMarketCap() {
-    return axios.get("/market").then(data => {
-      this.setState({
-        market: data.data
-      });
-    });
+    return axios
+      .get("/market")
+      .then(data => {
+        this.setState(
+          {
+            market: data.data
+          },
+          () => {
+            for (let i = 0; i < this.state.market.length; i++) {
+              axios.post("/update", this.state.market[i]);
+            }
+            this.getPortfolio()
+          }
+        );
+      })
   }
 
   onClickPrice() {
@@ -156,29 +172,35 @@ class App extends React.Component {
     });
   }
 
+  getPortfolio() {
+    return axios.get("/portfolio").then(data => {
+      this.setState({
+        portfolio: data.data
+      });
+    });
+  }
+
   onSubmitAddPortfolio(e) {
     e.preventDefault();
-    for (let i = 0; i < this.state.portfolio.length; i++) {
-      if (this.state.portfolio[i].name === this.state.coinOnModal.name) {
-        console.log("Coin already exists in portfolio");
-        return;
-      }
-    }
+    let coin = {
+      symbol: this.state.coinOnModal.symbol,
+      name: this.state.coinOnModal.name,
+      amount: this.state.amount,
+      purchasePrice: this.state.purchasePrice,
+      currentPrice: this.state.coinOnModal.price
+    };
     if (this.state.purchasePrice > 0 && this.state.amount > 0) {
       console.log("Successfully Added!");
-      let coin = {
-        name: this.state.coinOnModal.name,
-        symbol: this.state.coinOnModal.symbol,
-        currentPrice: this.state.coinOnModal.price,
-        purchasePrice: this.state.purchasePrice,
-        amount: this.state.amount
-      };
-      this.setState({
-        portfolio: [...this.state.portfolio, coin],
-        showModal: false,
-        purchasePrice: 0,
-        amount: 0
-      });
+      return axios
+        .post("/portfolio", coin)
+        .then(this.getPortfolio())
+        .then(
+          this.setState({
+            showModal: false,
+            purchasePrice: 0,
+            amount: 0
+          })
+        );
     } else {
       console.log("Please type in both purchase price and amount of the coin");
       document.getElementById("modal-input-price").reset();
@@ -190,12 +212,8 @@ class App extends React.Component {
     }
   }
 
-  onClickRemove(i) {
-    const portfolioAdjusted = this.state.portfolio;
-    portfolioAdjusted.splice(i, 1);
-    this.setState({
-      portfolio: portfolioAdjusted
-    });
+  onClickRemove(coin) {
+    return axios.get(`/portfolio/${coin.symbol}`).then(this.getPortfolio());
   }
 
   showCurrency() {
