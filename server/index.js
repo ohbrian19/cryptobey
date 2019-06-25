@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const axios = require("axios");
-const COINMARKETCAP_API = require("../api.config.js").COINMARKETCAP_API || process.env.API
+const COINMARKETCAP_API = process.env.API || require("../api.config.js").COINMARKETCAP_API
 const cors = require('cors')
 
 const app = express();
