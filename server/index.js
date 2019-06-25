@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const axios = require("axios");
-const { COINMARKETCAP_API } = require("../api.config.js");
+const COINMARKETCAP_API = require("../api.config.js").COINMARKETCAP_API || process.env.API
 const cors = require('cors')
 
 const app = express();
@@ -15,7 +15,7 @@ app.get("/market", function(req, res) {
   return axios
     .get(
       `https://pro-\api.coinmarketcap.com/v1/cryptocurrency/listings/latest`,
-      { headers: { "X-CMC_PRO_API_KEY": COINMARKETCAP_API || process.env.API } }
+      { headers: { "X-CMC_PRO_API_KEY": COINMARKETCAP_API } }
     )
     .then(data => {
       res.send(data.data.data);
