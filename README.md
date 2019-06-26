@@ -1,5 +1,5 @@
 # cryptObey
-<img src='./cryptobey.gif' height='80%' width='80%'>
+<img src='./cryptobey.gif'>
 
 *`cryptObey`* 
 
