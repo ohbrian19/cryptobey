@@ -1,11 +1,12 @@
 # cryptObey
-
-*`cryptObey`* 
+<img src='./cryptobey.gif'>
 
 `cryptObey` uses `CoinMarketCap API` and `Rates API` to bring you real-time information of top 100 cryptocurrencies and over 30 different exchange rates
 
 ## Prerequisites
-
+- Node
+- NPM
+- MongoDB
 
 ## Deployment
 
@@ -24,3 +25,4 @@ npm run build - webpack compiling
 
 * [ReactJS](https://reactjs.org/)
 * [ExpressJS](https://expressjs.com/)
+* [MongoDB](https://www.mongodb.com/)
