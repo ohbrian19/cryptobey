@@ -11,18 +11,18 @@ const Popup = ({
       <div>
         <img src={`/img/${coin.symbol.toLowerCase()}.png`} width="30" />
       </div>
-      <div>name: {coin.name.toLowerCase()}</div>
-      <div>symbol: {coin.symbol.toLowerCase()}</div>
-      <div>current price: ${coin.price}</div>
+      <div><b>name: </b>{coin.name.toLowerCase()}</div>
+      <div><b>symbol: </b>{coin.symbol.toLowerCase()}</div>
+      <div><b>current price: </b>${coin.price}</div>
       <div>
         <form id="modal-input-price">
-          purchase price: $
+        <b>purchase price: </b>$
           <input type="number" min="0" onChange={onChangePurchasePrice} />
         </form>
       </div>
       <div>
         <form id="modal-input-amount">
-          amount: <input type="number" min="0" onChange={onChangeAmount} />{" "}
+        <b>amount: </b><input type="number" min="0" onChange={onChangeAmount} />{" "}
           {coin.symbol.toLowerCase()}
         </form>
       </div>

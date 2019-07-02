@@ -50,12 +50,6 @@ class App extends React.Component {
     this.getMarketCap();
   }
 
-  updateCurrentPrice() {
-    for (let i = 0; i < this.state.portfolio.length; i++) {
-      console.log(this.state.portfolio[i].currentPrice);
-    }
-  }
-
   getTotalMarketCap() {
     return axios.get("/total").then(data => {
       this.setState({
@@ -65,19 +59,19 @@ class App extends React.Component {
   }
 
   getMarketCap() {
-    return axios.get("/market").then(data => {
-      this.setState(
-        {
+    return axios
+      .get("/market")
+      .then(data => {
+        this.setState({
           market: data.data
-        },
-        () => {
-          for (let i = 0; i < this.state.market.length; i++) {
-            axios.post("/update", this.state.market[i]);
-          }
-          this.getPortfolio();
+        });
+      })
+      .then(() => {
+        for (let i = 0; i < this.state.market.length; i++) {
+          axios.post("/update", this.state.market[i]);
         }
-      );
-    });
+        this.getPortfolio();
+      });
   }
 
   onClickPrice() {
@@ -200,7 +194,7 @@ class App extends React.Component {
           })
         );
     } else {
-      console.log("Please type in both purchase price and amount of the coin");
+      console.log("Please enter both purchase price and amount of the coin");
       document.getElementById("modal-input-price").reset();
       document.getElementById("modal-input-amount").reset();
       this.setState({
@@ -266,7 +260,6 @@ class App extends React.Component {
             onClickRemove={this.onClickRemove}
           />
         )}
-
         <Footer />
       </div>
     );

@@ -54,7 +54,6 @@ const Market = ({
                   <img
                     src={`/img/${coin.symbol.toLowerCase()}.png`}
                     width="18"
-                    height="18"
                     align="middle"
                   />{" "}
                   <span className="col2-name">{coin.name.toLowerCase()}</span>
