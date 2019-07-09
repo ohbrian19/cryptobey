@@ -34,8 +34,9 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
       }
     ]
   };
+  const auth2 = gapi.auth2.getAuthInstance();
 
-  return (
+  return auth2.isSignedIn.get() ? (
     <div className="portfolio">
       <div className="portfolio-chart">
         {portfolio.length > 0 ? (
@@ -158,6 +159,8 @@ const Portfolio = ({ portfolio, onClickRemove }) => {
         </tbody>
       </table>
     </div>
+  ) : (
+    <div>Please Sign In to use Portfolio</div>
   );
 };
 

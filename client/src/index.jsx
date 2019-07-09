@@ -43,6 +43,8 @@ class App extends React.Component {
     this.onSubmitAddPortfolio = this.onSubmitAddPortfolio.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
     this.showCurrency = this.showCurrency.bind(this);
+
+    this.signOut = this.signOut.bind(this);
   }
 
   componentDidMount() {
@@ -129,21 +131,27 @@ class App extends React.Component {
   }
 
   onClickCoinToAdd(coin) {
-    this.setState({
-      showModal: !this.state.showModal,
-      coinOnModal: !this.state.showModal
-        ? {
-            name: coin.name,
-            symbol: coin.symbol,
-            price:
-              coin.quote.USD.price > 1
-                ? roundTo(coin.quote.USD.price, 2)
-                : roundTo(coin.quote.USD.price, 6)
-          }
-        : null,
-      amount: 0,
-      purchasePrice: 0
-    });
+    const auth2 = gapi.auth2.getAuthInstance();
+    const profile = auth2.currentUser.get().getBasicProfile();
+    if (auth2.isSignedIn.get()) {
+      this.setState({
+        showModal: !this.state.showModal,
+        coinOnModal: !this.state.showModal
+          ? {
+              name: coin.name,
+              symbol: coin.symbol,
+              price:
+                coin.quote.USD.price > 1
+                  ? roundTo(coin.quote.USD.price, 2)
+                  : roundTo(coin.quote.USD.price, 6)
+            }
+          : null,
+        amount: 0,
+        purchasePrice: 0
+      });
+    } else {
+      alert("Please Sign In to use Portfolio")
+    }
   }
 
   onClickMarketOrPortfolio() {
@@ -212,6 +220,13 @@ class App extends React.Component {
     this.setState({ showCurrency: !this.state.showCurrency });
   }
 
+  signOut() {
+    const auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function() {
+      console.log("User signed out.");
+    });
+  }
+
   render() {
     return (
       <div>
@@ -220,6 +235,7 @@ class App extends React.Component {
           onClickMarketOrPortfolio={this.onClickMarketOrPortfolio}
           showCurrency={this.showCurrency}
           loginLogout={this.loginLogout}
+          signOut={this.signOut}
         />
         <Modal
           visible={this.state.showModal}
